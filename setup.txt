@@ -1,0 +1,6 @@
+hydra-core
+mediapipe
+pandas
+opencv-python
+tensorflow
+scikit-learn

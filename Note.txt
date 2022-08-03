@@ -1,0 +1,3 @@
+MediaPipe Pose
+- Nhan dien 32 diem tren khung suong cuon nguoi
+- Collect 10 frame (moi frame la du lieu 32 diem khung suong) roi dua vao model LSTM de nhan dien
