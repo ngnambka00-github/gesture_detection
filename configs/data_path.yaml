@@ -1,0 +1,9 @@
+data: 
+  body_swing: data/BODY_SWING.txt
+  hand_left_swing: data/HAND_LEFT_SWING.txt
+  hand_right_swing: data/HAND_RIGHT_SWING.txt
+  hand_two_swing: data/HAND_TWO_SWING.txt
+
+model: 
+  best_model: model/best_model.h5
+  checkpoint: model/checkpoint.hdf5

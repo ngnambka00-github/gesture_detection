@@ -1,9 +1,22 @@
 import cv2
+import os
 import mediapipe as mp
 from utils import make_landmark_timestep, draw_landmark_on_image, draw_class_on_image
 import numpy as np
 import keras
 import threading
+
+from hydra import initialize, compose
+from omegaconf import OmegaConf
+
+import warnings
+warnings.filterwarnings('ignore')
+
+with initialize(config_path="../configs/"):
+    data_cfg = compose(config_name="data_path")
+data_cfg = OmegaConf.create(data_cfg)
+HOME_PATH = "../"
+best_model_path = os.path.join(HOME_PATH, data_cfg.model.best_model)
 
 # Doc anh tu webcame
 cap = cv2.VideoCapture(0)
@@ -14,7 +27,7 @@ pose = mpPose.Pose()
 mpDraw = mp.solutions.drawing_utils
 
 # load model
-model = keras.models.load_model("../model/best_model.h5")
+model = keras.models.load_model(best_model_path)
 
 label = "Initialization ... "
 skeleton_landmark_list = []
@@ -23,14 +36,13 @@ n_time_steps = 10
 
 def detect(model, lm_list):
     global label
+    label_list = ["BODY_SWING", "HAND_LEFT_SWING", "HAND_RIGHT_SWING", "HAND_TWO_SWING"]
     lm_list = np.array(lm_list)
     lm_list = np.expand_dims(lm_list, axis=0)
-    results = model.predict(lm_list)
 
-    if results[0][0] > 0.5: 
-        label = "BODY_SWING"
-    else: 
-        label = "HAND_SWING"
+    results = model.predict(lm_list)[0]
+    idx_max_confident = results.argmax()
+    label = label_list[idx_max_confident]
     
     return label
 
